@@ -115,28 +115,36 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+. "$HOME/.cargo/env"
+source /home/$USER/usrapps/alacritty/extra/completions/alacritty.bash
+export SIGNALFX_CREDENTIALS=/var/secrets/signalfx/key.json
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/rytse/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/$USER/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/rytse/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/rytse/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/$USER/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/$USER/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/rytse/anaconda3/bin:$PATH"
+        export PATH="/home/$USER/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# Install Ruby Gems to ~/gems
-export GEM_HOME="$HOME/gems"
-export PATH="$HOME/gems/bin:$PATH"
+# Super diff
+sdiff() {
+    diff -u $1 $2 | ydiff -s
+}
 
-# Flutter
-export PATH="$PATH":"$HOME/usrlib/flutter/bin"    # flutter
-export PATH="$PATH":"$HOME/usrlib/flutter/bin/cache/dart-sdk/bin"   # dart
-export PATH="$PATH":"$HOME/.pub-cache/bin"  # web tools
-export PATH="$PATH":"$HOME/usrapps/ripgrep/target/release/"  # ripgrep
+alias alert='notify-send --urgency=low -i "$([ $? = 0  ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias grep='grep --color=auto'
+alias diff='sdiff'
+alias l='ls -CF'
+alias la='ls -A'
+alias ll='ls -alF'
+alias ls='ls --color=auto'
